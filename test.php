@@ -1,36 +1,58 @@
 <!doctype html>
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "dvr_quiz";
 
-$conn = mysqli_connect($servername, $username, $password, $dbname);
+// Create a new MySQLi object
+$conn = new mysqli("localhost", "root", null, "dvr_quiz");
 
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
+// Check the connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
 
-
-// Capture the username from the previous form
+// Initialize variables
+$name = ''; 
+$question1 = ''; 
+var_dump($_POST);
+// Check if the username is set in the session
 if (isset($_POST['name'])) {
-    $name = mysqli_real_escape_string($conn, $_POST['name']);
+    $name = $_POST['name'];
+    var_dump($name);
 }
 
-if (isset($_POST['submit'])) {
-    $question1 = mysqli_real_escape_string($conn, $_POST['domanda1']);
-    $query = "INSERT INTO `questions` ('ID', 'qsn', ) VALUES (NULL, '$question1')";
+// Check if the form was submitted for the question
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Capture the question from the form
+    if (isset($_POST['domanda1'])) {
+        $question1 = $conn->real_escape_string(trim($_POST['domanda1']));
 
-    $result = mysqli_query($conn, $query);
-    if ($result) {
-        if (mysqli_affected_rows($conn) > 0) {
-            echo("Submitted successfully");
+        // Loop through the $_POST array
+        foreach ($_POST as $key => $value) {
+            // Skip the 'name' index
+            if ($key === 'name' || $key === 'submit') {
+                continue; // Skip this iteration
+            }
+            // Prepare the insert query
+            $query = "INSERT INTO `questions` (`ID`, `qsn`, `username`, `num_domanda`) VALUES (NULL, '$value', '$name', '$key')";
+
+            // Execute the query
+            if ($conn->query($query) === TRUE) 
+            {
+                if ($conn->affected_rows > 0) {
+                    echo "Submitted successfully";
+                }
+            } 
+            else 
+            {
+                die("Query failed: " . $conn->error);
+            }
         }
-    } else {
-        die("Query failed: " . mysqli_error($conn));
     }
 }
+
+// Close the connection
+$conn->close();
 ?>
+
 
 
 <html lang="en">
@@ -92,6 +114,7 @@ if (isset($_POST['submit'])) {
 
                     <tr>
                         <td>
+                            <input name="name" value="<?php echo $name;?>" type="hidden">
                             <input type="submit" name="submit" value="submit">
                         </td>
                     </tr>
