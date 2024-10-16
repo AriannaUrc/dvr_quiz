@@ -25,6 +25,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['domanda1'])) {
         $question1 = $conn->real_escape_string(trim($_POST['domanda1']));
 
+        $continue = false;
+
         // Loop through the $_POST array
         foreach ($_POST as $key => $value) {
             // Skip the 'name' index
@@ -33,7 +35,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
             // Prepare the insert query
             $query = "INSERT INTO `questions` (`ID`, `qsn`, `username`, `num_domanda`) VALUES (NULL, '$value', '$name', '$key')";
-
+            
+            if($value === 'Yes')
+            $continue = true;
+            
             // Execute the query
             if ($conn->query($query) === TRUE) 
             {
@@ -46,7 +51,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 die("Query failed: " . $conn->error);
             }
         }
-    }
+
+
+        // Redirect based on the value of $continue
+        if ($continue) {
+            // Redirect to the new form with the name variable
+            header("Location: prerequisite_2.php?name=" . urlencode($name));
+            exit(); // Always call exit after header redirection
+        } else {
+            // Redirect to PDF generation file with the name variable
+            header("Location: generate_pdf.php?name=" . urlencode($name));
+            exit(); // Always call exit after header redirection
+        }
 }
 
 // Close the connection
