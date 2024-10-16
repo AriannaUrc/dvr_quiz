@@ -12,11 +12,11 @@ if ($conn->connect_error) {
 // Initialize variables
 $name = ''; 
 $question1 = ''; 
-var_dump($_POST);
+//var_dump($_POST);
 // Check if the username is set in the session
 if (isset($_POST['name'])) {
     $name = $_POST['name'];
-    var_dump($name);
+    //var_dump($name);
 }
 
 // Check if the form was submitted for the question
@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($conn->query($query) === TRUE) 
             {
                 if ($conn->affected_rows > 0) {
-                    echo "Submitted successfully";
+                    //echo "Submitted successfully";
                 }
             } 
             else 
@@ -56,23 +56,29 @@ $conn->close();
 
 
 <html lang="en">
-    <head>
-        <title>Title</title>
-        <!-- Required meta tags -->
-        <meta charset="utf-8" />
-        <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, shrink-to-fit=no"
-        />
-
-        <!-- Bootstrap CSS v5.2.1 -->
-        <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-            rel="stylesheet"
-            integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-            crossorigin="anonymous"
-        />
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Questionnaire</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f8f9fa;
+        }
+        .form-container {
+            width: 100%;
+            max-width: 600px; /* Limit the form width */
+            padding: 20px;
+            border-radius: 10px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
 
     <body>
         <header>
@@ -81,45 +87,82 @@ $conn->close();
         <main>
 
             <form action="" method="post">
-                <!-- TODO: css version -->
-                <table align = "center">
-                    <tr>
-                        <td><label for="domanda1">L’attività consiste nel sollevare un carico</label></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <input type="radio" name="domanda1" value="No" checked>No</input>
-                        </td>
+            <h2 class="text-center mb-4">Questionnaire</h2>
+    
+            <div class="form-group">
+                <label for="domanda1">L’attività consiste nel sollevare un carico</label>
+                <div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="domanda1" value="No" checked>
+                        <label class="form-check-label">No</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="domanda1" value="Yes">
+                        <label class="form-check-label">Yes</label>
+                    </div>
+                </div>
+            </div>
 
-                        <td>
-                            <input type="radio" name="domanda1" value="Yes">Yes</input>
-                        </td>
+            <div class="form-group">
+                <label for="domanda2">L’attività consiste nel deporre un carico</label>
+                <div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="domanda2" value="No" checked>
+                        <label class="form-check-label">No</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="domanda2" value="Yes">
+                        <label class="form-check-label">Yes</label>
+                    </div>
+                </div>
+            </div>
 
-                    </tr>
+            <div class="form-group">
+                <label for="domanda3">L’attività consiste nello spingere un carico</label>
+                <div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="domanda3" value="No" checked>
+                        <label class="form-check-label">No</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="domanda3" value="Yes">
+                        <label class="form-check-label">Yes</label>
+                    </div>
+                </div>
+            </div>
 
+            <div class="form-group">
+                <label for="domanda4">L’attività consiste nel tirare un carico</label>
+                <div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="domanda4" value="No" checked>
+                        <label class="form-check-label">No</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="domanda4" value="Yes">
+                        <label class="form-check-label">Yes</label>
+                    </div>
+                </div>
+            </div>
 
-                    <tr>
-                        <td><label for="domanda2">L’attività consiste nel deporre un carico</label></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <input type="radio" name="domanda2" value="No" checked>No</input>
-                        </td>
+            <div class="form-group">
+                <label for="domanda5">L’attività consiste nel portare o spostare un carico</label>
+                <div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="domanda5" value="No" checked>
+                        <label class="form-check-label">No</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="domanda5" value="Yes">
+                        <label class="form-check-label">Yes</label>
+                    </div>
+                </div>
+            </div>
 
-                        <td>
-                            <input type="radio" name="domanda2" value="Yes">Yes</input>
-                        </td>
-
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <input name="name" value="<?php echo $name;?>" type="hidden">
-                            <input type="submit" name="submit" value="submit">
-                        </td>
-                    </tr>
-  
-                </table>
+            <input type="hidden" name="name" value="<?php echo htmlspecialchars($name); ?>">
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
             </form>
 
 
