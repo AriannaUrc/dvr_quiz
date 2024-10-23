@@ -14,11 +14,13 @@ $name = '';
 // Check if the username is set in the session
 if (isset($_POST['name'])) {
     $name = $_POST['name'];
-    var_dump($name);
+    //var_dump($name);
 }
 
+
 // Check if the form was submitted for the table
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_POST)>2) {
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_POST["items"][0])>2) {
+   // die(var_dump($_POST));
     // Loop through the submitted data
     foreach ($_POST['items'] as $item) {
         $description = $conn->real_escape_string(trim($item['description']));
@@ -30,6 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_POST)>2) {
 
         // Prepare the insert query
         $query = "INSERT INTO `heavy_objects` (`ID`, `description`, `num_objects`, `num_lifts_per_object`, `weight`, `duration`, `num_workers`, `username`) VALUES (NULL, '$description', $num_objects, $num_lifts_per_object, $weight, '$duration', $num_workers, '$name')";
+        //die(var_dump(($query)));
         // Execute the query
         if ($conn->query($query) !== TRUE) {
             die("Query failed: " . $conn->error);
@@ -37,12 +40,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_POST)>2) {
     }
 
     // Redirect after successful submission
-    /* echo "<form id='redirectForm' action='test.php' method='post'>";
+    echo "<form id='redirectForm' action='test.php' method='post'>";
     echo "<input type='hidden' name='name' value='" . htmlspecialchars($name) . "'>";
     echo "</form>";
     echo "<script>
         document.getElementById('redirectForm').submit();
-    </script>"; */
+    </script>"; 
             
     exit(); // Always call exit after header redirection
 }
