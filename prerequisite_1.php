@@ -1,5 +1,7 @@
 <!doctype html>
 <?php
+// Start the session
+session_start();
 
 // Create a new MySQLi object
 $conn = new mysqli("localhost", "root", null, "dvr_quiz");
@@ -11,65 +13,68 @@ if ($conn->connect_error) {
 
 // Initialize variables
 $name = ''; 
-$question1 = ''; 
-//var_dump($_POST);
+$continue = false; // Default to false
+
 // Check if the username is set in the session
 if (isset($_POST['name'])) {
     $name = $_POST['name'];
-    //var_dump($name);
+    //var_dump("nome settato");
 }
 
-// Check if the form was submitted for the question
+// Check if the form was submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Capture the question from the form
-    if (isset($_POST['domanda1'])) {
-        $question1 = $conn->real_escape_string(trim($_POST['domanda1']));
+    foreach ($_POST as $key => $value) {
+        // Skip the 'name' index and the submit button
+        if ($key === 'name' || $key === 'submit') {
+            continue; 
+        }
 
-        $continue = false;
+        $value = $conn->real_escape_string(trim($value)); // Escape input
 
-        // Loop through the $_POST array
-        foreach ($_POST as $key => $value) {
-            // Skip the 'name' index
-            if ($key === 'name' || $key === 'submit') {
-                continue; // Skip this iteration
-            }
-            // Prepare the insert query
-            $query = "INSERT INTO `questions` (`ID`, `qsn`, `username`, `num_domanda`) VALUES (NULL, '$value', '$name', '$key')";
-            
-            if($value === 'Yes')
+        // Prepare the insert query
+        $query = "INSERT INTO `questions` (`ID`, `qsn`, `num_domanda`, `username`) VALUES (NULL, '$value', '$key', '$name')";
+        
+        // Check if the value is 'Yes' to determine redirection 
+        if ($value === 'Yes') {
             $continue = true;
-            
-            // Execute the query
-            if ($conn->query($query) === TRUE) 
-            {
-                if ($conn->affected_rows > 0) {
-                    //echo "Submitted successfully";
-                }
-            } 
-            else 
-            {
-                die("Query failed: " . $conn->error);
-            }
         }
 
+        // Execute the query
+        if ($conn->query($query) !== TRUE) {
+            die("Query failed: " . $conn->error);
+        }
+    }
 
-        // Redirect based on the value of $continue
+
+    if (count($_POST) > 2) {
+        // Prepare the name to be sent
+        echo "<form id='redirectForm' action='";
+    
+        // Choose the action based on the condition
         if ($continue) {
-            // Redirect to the new form with the name variable
-            header("Location: prerequisite_2.php?name=" . urlencode($name));
-            exit(); // Always call exit after header redirection
+            echo "prerequisite_2.php";
         } else {
-            // Redirect to PDF generation file with the name variable
-            header("Location: generate_pdf.php?name=" . urlencode($name));
-            exit(); // Always call exit after header redirection
+            echo "generate_pdf.php";
         }
+    
+        echo "' method='post'>";
+        echo "<input type='hidden' name='name' value='" . htmlspecialchars($name) . "'>";
+        echo "</form>";
+    
+        // Use JavaScript to submit the form
+        echo "<script>
+            document.getElementById('redirectForm').submit();
+        </script>";
+        exit(); // Always call exit after the form submission
+    }
+    
+    
 }
 
 // Close the connection
 $conn->close();
 ?>
-
-
 
 <html lang="en">
 <head>
@@ -96,17 +101,13 @@ $conn->close();
     </style>
 </head>
 
-    <body>
-        <header>
-            <!-- place navbar here -->
-        </header>
-        <main>
-
-            <form action="" method="post">
+<body>
+    <main>
+        <form action="" method="post">
             <h2 class="text-center mb-4">Questionnaire</h2>
-    
+
             <div class="form-group">
-                <label for="domanda1">L’attività consiste nel sollevare un carico</label>
+                <label>L’attività consiste nel sollevare un carico</label>
                 <div>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="domanda1" value="No" checked>
@@ -120,7 +121,7 @@ $conn->close();
             </div>
 
             <div class="form-group">
-                <label for="domanda2">L’attività consiste nel deporre un carico</label>
+                <label>L’attività consiste nel deporre un carico</label>
                 <div>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="domanda2" value="No" checked>
@@ -134,7 +135,7 @@ $conn->close();
             </div>
 
             <div class="form-group">
-                <label for="domanda3">L’attività consiste nello spingere un carico</label>
+                <label>L’attività consiste nello spingere un carico</label>
                 <div>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="domanda3" value="No" checked>
@@ -148,7 +149,7 @@ $conn->close();
             </div>
 
             <div class="form-group">
-                <label for="domanda4">L’attività consiste nel tirare un carico</label>
+                <label>L’attività consiste nel tirare un carico</label>
                 <div>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="domanda4" value="No" checked>
@@ -162,7 +163,7 @@ $conn->close();
             </div>
 
             <div class="form-group">
-                <label for="domanda5">L’attività consiste nel portare o spostare un carico</label>
+                <label>L’attività consiste nel portare o spostare un carico</label>
                 <div>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="domanda5" value="No" checked>
@@ -179,25 +180,10 @@ $conn->close();
             <div class="text-center">
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>
-            </form>
-
-
-
-        </main>
-        <footer>
-            <!-- place footer here -->
-        </footer>
-        <!-- Bootstrap JavaScript Libraries -->
-        <script
-            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-            integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-            crossorigin="anonymous"
-        ></script>
-
-        <script
-            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
-            integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
-            crossorigin="anonymous"
-        ></script>
-    </body>
+        </form>
+    </main>
+    <!-- Bootstrap JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+</body>
 </html>

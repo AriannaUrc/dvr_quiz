@@ -21,11 +21,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['question1'])) {
     if ($conn->query($query) === TRUE) {
         // Check response and redirect accordingly
         if ($response === 'No') {
-            header("Location: generate_pdf.php?name=" . urlencode($name));
+            echo "<form id='redirectForm' action='generate_pdf.php' method='post'>";
+            echo "<input type='hidden' name='name' value='" . htmlspecialchars($name) . "'>";
+            echo "</form>";
+            echo "<script>
+                document.getElementById('redirectForm').submit();
+            </script>";
+            exit(); // Always call exit after the form submission
         } elseif ($response === 'Yes') {
-            header("Location: prerequisite_3.php?name=" . urlencode($name));
+            echo "<form id='redirectForm' action='prerequisite_3.php' method='post'>";
+            echo "<input type='hidden' name='name' value='" . htmlspecialchars($name) . "'>";
+            echo "</form>";
+            echo "<script>
+                document.getElementById('redirectForm').submit();
+            </script>";
+            exit(); // Always call exit after the form submission
         }
-        exit(); // Always call exit after header redirection
     } else {
         die("Query failed: " . $conn->error);
     }
