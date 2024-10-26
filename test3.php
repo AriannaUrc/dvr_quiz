@@ -172,9 +172,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_POST)>2) {
     if ($heavy_object_weight) {
         // Step 2: Calculate INDICE DI SOLLEVAMENTO
         $lifting_index = $heavy_object_weight / $recommended_weight;
-        var_dump($recommended_weight);
+        /* var_dump($recommended_weight);
         var_dump($heavy_object_weight);
-        var_dump($lifting_index);
+        var_dump($lifting_index); */
     } else {
         // Handle the case where no heavy object is found (optional)
         $lifting_index = null; // or some default value
@@ -192,10 +192,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_POST)>2) {
     
     // Redirect after processing
     echo "<form id='redirectForm' ";
-    if($lifting_index>1){
-        echo "action='test4.php' ";
-    }
-    else{
+    if ($lifting_index > 1) {
+        // Check if at least one of the factors is zero
+        if ($height_factor == 0 || $vertical_distance_factor == 0 || $horizontal_distance_factor == 0 || 
+            $angular_dislocation_factor == 0 || $load_quality_factor == 0 || $frequency_factor == 0 || 
+            $cp_factor == 0) {
+            // Redirect to test4.php
+            echo "action='test4.php' ";
+        } else {
+            // Otherwise redirect to generate_pdf.php
+            echo "action='generate_pdf.php' ";
+        }
+    } else {
+        // If lifting index is not greater than 0, redirect to generate_pdf.php
         echo "action='generate_pdf.php' ";
     }
     echo "method='post'>";
