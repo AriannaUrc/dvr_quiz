@@ -19,7 +19,7 @@ if (isset($_POST['name'])) {
 
 
 // Check if the form was submitted for the table
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_POST["items"][0])>2) {
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["items"][0])) {
    // die(var_dump($_POST));
     // Loop through the submitted data
     foreach ($_POST['items'] as $item) {
@@ -30,6 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_POST["items"][0])>2) {
         $duration = $conn->real_escape_string(trim($item['duration']));
         $num_workers = (int) $item['num_workers'];
 
+        
         // Prepare the insert query
         $query = "INSERT INTO `heavy_objects` (`ID`, `description`, `num_objects`, `num_lifts_per_object`, `weight`, `duration`, `num_workers`, `username`) VALUES (NULL, '$description', $num_objects, $num_lifts_per_object, $weight, '$duration', $num_workers, '$name')";
         //die(var_dump(($query)));
@@ -40,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_POST["items"][0])>2) {
     }
 
     // Redirect after successful submission
-    echo "<form id='redirectForm' action='test.php' method='post'>";
+    echo "<form id='redirectForm' action='test2.php' method='post'>";
     echo "<input type='hidden' name='name' value='" . htmlspecialchars($name) . "'>";
     echo "</form>";
     echo "<script>

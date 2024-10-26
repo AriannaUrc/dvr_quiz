@@ -30,6 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             continue; 
         }
 
+        //die(var_dump($_POST));
+
         $value = $conn->real_escape_string(trim($value)); // Escape input
 
         // Prepare the insert query
