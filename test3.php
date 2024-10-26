@@ -171,7 +171,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_POST)>2) {
     // Check if a heavy object was found
     if ($heavy_object_weight) {
         // Step 2: Calculate INDICE DI SOLLEVAMENTO
+        if($recommended_weight!=0)
         $lifting_index = $heavy_object_weight / $recommended_weight;
+        else
+        $lifting_index = 99;
         /* var_dump($recommended_weight);
         var_dump($heavy_object_weight);
         var_dump($lifting_index); */
