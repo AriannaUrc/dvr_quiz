@@ -184,8 +184,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_POST)>2) {
     }
    
     // Prepare the INSERT statement directly
-    $query = "INSERT INTO peso_limite (username, cp, vertical_distance_factor, horizontal_distance_factor, angular_dislocation_factor, load_quality_factor, frequency_factor, recommended_weight, r) 
-    VALUES ('$name', '$cp_factor', $vertical_distance_factor, $horizontal_distance_factor, $angular_dislocation_factor, $load_quality_factor, $frequency_factor, $recommended_weight, $lifting_index)";
+    $query = "INSERT INTO peso_limite (username, cp, vertical_distance_factor, horizontal_distance_factor, angular_dislocation_factor, load_quality_factor, frequency_factor, recommended_weight, r, heaviest_weight) 
+    VALUES ('$name', '$cp_factor', $vertical_distance_factor, $horizontal_distance_factor, $angular_dislocation_factor, $load_quality_factor, $frequency_factor, $recommended_weight, $lifting_index, $heavy_object_weight)";
 
     // Execute the query
     if ($conn->query($query) !== TRUE) {
