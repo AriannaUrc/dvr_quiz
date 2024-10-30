@@ -1,0 +1,48 @@
+-- Create the database
+CREATE DATABASE IF NOT EXISTS dvr_quiz;
+
+-- Use the database
+USE dvr_quiz;
+
+-- Create the questions table
+CREATE TABLE IF NOT EXISTS questions (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    qsn TEXT NOT NULL,
+    num_domanda VARCHAR(255) NOT NULL,
+    username VARCHAR(255) NOT NULL
+);
+
+-- Create the heavy_objects table
+CREATE TABLE IF NOT EXISTS heavy_objects (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    description TEXT NOT NULL,
+    num_objects INT NOT NULL,
+    num_lifts_per_object INT NOT NULL,
+    weight FLOAT NOT NULL,
+    duration VARCHAR(255) NOT NULL,
+    num_workers INT NOT NULL,
+    username VARCHAR(255) NOT NULL
+);
+
+-- Create the peso_limite table
+CREATE TABLE IF NOT EXISTS peso_limite (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    cp FLOAT NOT NULL,
+    vertical_distance_factor FLOAT NOT NULL,
+    horizontal_distance_factor FLOAT NOT NULL,
+    angular_dislocation_factor FLOAT NOT NULL,
+    load_quality_factor FLOAT NOT NULL,
+    frequency_factor FLOAT NOT NULL,
+    recommended_weight FLOAT NOT NULL,
+    r FLOAT,
+    heaviest_weight FLOAT
+);
+
+-- Create the critical_situation table
+CREATE TABLE IF NOT EXISTS critical_situation (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    qsn TEXT NOT NULL,
+    username VARCHAR(255) NOT NULL,
+    num_domanda VARCHAR(255) NOT NULL
+);

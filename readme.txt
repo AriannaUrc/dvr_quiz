@@ -1,0 +1,1 @@
+Before you start the project you need to enable the gd extension in xampp and create the database with the sql put in create_database
